@@ -58,6 +58,7 @@ def print_hi(file_path):
     # 检查文件是否存在
     if not os.path.exists(file_path):
         print(f"Error: The file {file_path} does not exist.")
+        time.sleep(100)
     else:
         ser = None  # 初始化ser变量
         # 尝试打开串口
