@@ -1,6 +1,6 @@
 # ProjectSender
 
-simulate a Serial Port Transponder
+Simulate a Serial Port Transponder.
 
 ## Overview
 
@@ -15,6 +15,7 @@ simulate a Serial Port Transponder
 
 <details>
   <summary>Show images</summary>
+
   ![](https://raw.githubusercontent.com/zhongwcool/ProjectSender/main/Assets/154402.png)
 </details>
 
@@ -26,7 +27,7 @@ simulate a Serial Port Transponder
 pip3 install pyserial
 ```
 
-## 打包成exe文件
+## 打包
 
 使用**pyinstaller**打包成exe文件，打开**PyCharm**的`Terminal`输入：
 
@@ -43,7 +44,3 @@ pyinstaller --onefile --name Sender --icon app.ico main.py
 ```shell
 pyinstaller --onefile --name Sender --icon app.ico --additional-hooks-dir .venv\Lib\site-packages\serial\__init__.py main.py
 ```
-
-## 开发路线图
-
-- 端口采用配置文件，配置文件包含了串口名，波特率等信息。

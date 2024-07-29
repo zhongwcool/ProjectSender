@@ -1,3 +1,4 @@
+import configparser
 import os
 import time
 
@@ -6,6 +7,23 @@ import serial
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+
+def ensure_config_file_exists(config_file_path, default_settings):
+    config = configparser.ConfigParser()
+
+    # 检查配置文件是否存在
+    if not os.path.exists(config_file_path):
+        # 配置文件不存在，使用默认配置创建它
+        config['SerialPort'] = default_settings
+        with open(config_file_path, 'w') as configfile:
+            config.write(configfile)
+    else:
+        # 配置文件存在，读取现有配置
+        config.read(config_file_path)
+
+    return config
+
+
 def send_hex_line(serial_connection, hex_line):
     # 去除空白字符并转换成字节
     byte_array = bytes.fromhex(hex_line.strip())
@@ -19,14 +37,25 @@ def print_hi(file_path):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {file_path}')  # Press Ctrl+F8 to toggle the breakpoint.
 
-    # 串口配置
-    # serial_port = '/dev/ttyUSB0'  # Unix设备串口名称
-    serial_port = 'COM11'  # Windows设备串口名称
-    baud_rate = 9600  # 波特率
-    timeout = 0.5  # 超时设置
+    # 默认配置
+    default_serial_settings = {
+        'Port': 'COM11',  # Windows设备串口名称
+        'BaudRate': '9600',  # 波特率
+        'Timeout': '0.5'  # 超时设置
+    }
+
+    # 配置文件路径
+    config_file_path = 'serial.ini'
+
+    # 确保配置文件存在
+    config = ensure_config_file_exists(config_file_path, default_serial_settings)
+
+    # 读取配置
+    serial_port = config.get('SerialPort', 'Port')
+    baud_rate = config.getint('SerialPort', 'BaudRate')
+    timeout = config.getfloat('SerialPort', 'Timeout')
 
     # 检查文件是否存在
-    file_path = 'hex_data.txt'
     if not os.path.exists(file_path):
         print(f"Error: The file {file_path} does not exist.")
     else:
